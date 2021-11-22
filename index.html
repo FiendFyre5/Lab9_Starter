@@ -86,7 +86,15 @@
       <button>Trigger a Global Error</button>
     </section>
   </main>
-
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+  <script>
+    window.TrackJS && TrackJS.install({ 
+      token: "2be3db24b55e4a9a9c06e277d43e8005"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+    TrackJS.track('Testing TrackJS!');
+  </script>
+                        
   <script>
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
@@ -95,14 +103,103 @@
       let firstNum = document.querySelector('#first-num').value;
       let secondNum = document.querySelector('#second-num').value;
       let operator = document.querySelector('#operator').value;
+      try{
       output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      if(secondNum =='/' || secondNum =='+'|| secondNum =='-' || secondNum =='*'){
+        alert("invalid operator");
+        throw new operatorError("Invalid operator");
+      }
+    }
+    catch(err){
+      console.log(err.name);
+      if(err instanceof SyntaxError){
+        alert("err" + err.message);
+        throw new SyntaxError("msg");
+      }
+      if(err instanceof ReferenceError){
+        alert("wrong user");
+          throw new ReferenceError("reference error");
+      }
+    }finally{
+      console.info("Done!11!");
+    }
     });
+   
+    //4
+    window.onerror = function (errorMessage,url,lineNumber) { 
+      console.log("onerror" + errorMessage);
+     }
+    class operatorError extends Error {
+      constructor(message) {
+        super(message); // (1)
+        this.name = "operatorError"; // (2)
+      }
+    }
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
 
+
     // Start your code here
     // You may move this JS to another file if you wish
+    let clog = errorBtns[0];
+    clog.addEventListener('click', () => { console.log('console log message'); });
+
+    let cerror = errorBtns[1];
+    cerror.addEventListener('click', () => { console.error('console error message'); });
+
+    let ccount = errorBtns[2];
+    ccount.addEventListener('click', () => { console.count('console count message'); });
+    
+    let cwarn = errorBtns[3];
+    cwarn.addEventListener('click', () => { console.warn('console warn message'); });
+
+    let cassert = errorBtns[4];
+    cassert.addEventListener('click', () => { 
+      const a = 4;
+      const b = 2;
+      const result = 9;
+      const msg = "multiplication rule fail";
+      console.assert(a*b ==result,{a,b,result,msg}); });
+    
+    let cclear = errorBtns[5];
+    cclear.addEventListener('click', () => { console.clear(); });
+    
+    let cdir = errorBtns[6];
+    cdir.addEventListener('click', () => { console.dir(cdir); });
+    
+    let cdirxml = errorBtns[7];
+    cdirxml.addEventListener('click', () => { console.dirxml(cdirxml); });
+    
+    let cgroup = errorBtns[8];
+    cgroup.addEventListener('click', () => { console.group('console group message'); });
+    
+    let cgroupend = errorBtns[9];
+    cgroupend.addEventListener('click', () => { console.groupEnd(); });
+    
+    let ctable= errorBtns[10];
+    ctable.addEventListener('click', () => { console.table([
+      {user: 'Lavanya',class:"cse110",},{user: 'Nidhi',class:"bio110",}
+    ]); });
+    
+    let ctime = errorBtns[11];
+    ctime.addEventListener('click', () => { console.time(); });
+    
+    let ctimend = errorBtns[12];
+    ctimend.addEventListener('click', () => { console.timeEnd(); });
+    
+    let ctrace = errorBtns[13];
+    
+    ctrace.addEventListener('click', () => { 
+      const one =()=>{two();}
+    const two = () => {three();}
+    const three =() => {console.trace();}
+      one(); });
+    
+    let cglobal = errorBtns[14];
+    cglobal.addEventListener('click', () => { global });
+    
   </script>
+
 </body>
 
 </html>
